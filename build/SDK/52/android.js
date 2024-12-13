@@ -58,19 +58,14 @@ function proGuardRules(config) {
             return config;
         }]);
 }
-function withAndroidSDK52(options) {
-    return (config) => {
-        let currentConfig = config;
-        if ((options === null || options === void 0 ? void 0 : options.disableJsi) !== true) {
-            currentConfig = settingGradle(config);
-            currentConfig = buildGradle(currentConfig);
-            currentConfig = proGuardRules(currentConfig);
-            currentConfig = mainApplication(currentConfig);
-        }
-        return currentConfig;
-    };
-}
-exports.withAndroidSDK52 = withAndroidSDK52;
-exports.default = (config, options) => {
-    return withAndroidSDK52(options)(config);
+const withAndroidSDK52 = (config, options) => {
+    let currentConfig = config;
+    if ((options === null || options === void 0 ? void 0 : options.disableJsi) !== true) {
+        currentConfig = settingGradle(config);
+        currentConfig = buildGradle(currentConfig);
+        currentConfig = proGuardRules(currentConfig);
+        currentConfig = mainApplication(currentConfig);
+    }
+    return currentConfig;
 };
+exports.withAndroidSDK52 = withAndroidSDK52;

@@ -80,20 +80,14 @@ function proGuardRules(config: ExpoConfig): ExpoConfig {
   }]) as ExpoConfig;
 }
 
-export function withAndroidSDK52(options: Options) {
-  return (config: ExpoConfig): ExpoConfig => {
-    let currentConfig: ExpoConfig = config;
-    if (options?.disableJsi !== true) {
-      currentConfig = settingGradle(config);
-      currentConfig = buildGradle(currentConfig);
-      currentConfig = proGuardRules(currentConfig);
-      currentConfig = mainApplication(currentConfig);
-    }
-
-    return currentConfig as ExpoConfig;
+export const withAndroidSDK52 = ( config: ExpoConfig, options: Options) => {
+  let currentConfig: ExpoConfig = config;
+  if (options?.disableJsi !== true) {
+    currentConfig = settingGradle(config);
+    currentConfig = buildGradle(currentConfig);
+    currentConfig = proGuardRules(currentConfig);
+    currentConfig = mainApplication(currentConfig);
   }
-}
 
-export default (config: ExpoConfig, options: Options) => {
-  return withAndroidSDK52(options)(config);
-};
+  return currentConfig as ExpoConfig;
+}

@@ -1,5 +1,5 @@
 import minimist from "minimist";
-import withAndroidSDK52 from "./SDK/52/android";
+import { withAndroidSDK52 } from "./SDK/52/android";
 
 const args = minimist(process.argv.slice(2));
 

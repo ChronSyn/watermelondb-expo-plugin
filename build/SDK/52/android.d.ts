@@ -4,6 +4,5 @@ type Options = {
     databases?: string[];
     excludeSimArch?: boolean;
 };
-export declare function withAndroidSDK52(options: Options): (config: ExpoConfig) => ExpoConfig;
-declare const _default: (config: ExpoConfig, options: Options) => ExpoConfig;
-export default _default;
+export declare const withAndroidSDK52: (config: ExpoConfig, options: Options) => ExpoConfig;
+export {};

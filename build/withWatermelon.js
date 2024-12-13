@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const minimist_1 = __importDefault(require("minimist"));
-const android_1 = __importDefault(require("./SDK/52/android"));
+const android_1 = require("./SDK/52/android");
 const args = (0, minimist_1.default)(process.argv.slice(2));
 //@ts-ignore
 exports.default = (config, options) => {
@@ -12,19 +12,19 @@ exports.default = (config, options) => {
     switch (config.sdkVersion) {
         case '52.0.0':
             if (PLATFORM === 'android') {
-                return (0, android_1.default)(config, options);
+                return (0, android_1.withAndroidSDK52)(config, options);
             }
         case '51.0.0':
             if (PLATFORM === 'android') {
-                return (0, android_1.default)(config, options);
+                return (0, android_1.withAndroidSDK52)(config, options);
             }
         case '50.0.0':
             if (PLATFORM === 'android') {
-                return (0, android_1.default)(config, options);
+                return (0, android_1.withAndroidSDK52)(config, options);
             }
         default:
             if (PLATFORM === 'android') {
-                return (0, android_1.default)(config, options);
+                return (0, android_1.withAndroidSDK52)(config, options);
             }
     }
 };
