@@ -7,7 +7,7 @@ import {
 import { ExpoConfig } from "@expo/config-types";
 import fs from "fs";
 
-type Options = {
+export type Options = {
   disableJsi?: boolean;
   databases?: string[];
   excludeSimArch?: boolean;

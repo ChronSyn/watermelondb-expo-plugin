@@ -1,31 +1,14 @@
-import minimist from "minimist";
-import { withAndroidSDK52 } from "./SDK/52/android";
+import { ExpoConfig } from "@expo/config-types";
+import { withAndroidSDK52, Options as SDK52Options } from "./SDK/52/android";
 
-const args = minimist(process.argv.slice(2));
+type Options =
+  | SDK52Options
 
-//@ts-ignore
-export default (config, options) => {
-  
-  const PLATFORM = args.platform;
+export default (config: ExpoConfig, options: Options) => {
   switch (config.sdkVersion) {
     case '52.0.0':
-      if (PLATFORM === 'android') {
-        return withAndroidSDK52(config, options);
-      }
-
-    case '51.0.0':
-      if (PLATFORM === 'android') {
-        return withAndroidSDK52(config, options);
-      }
-
-    case '50.0.0':
-      if (PLATFORM === 'android') {
-        return withAndroidSDK52(config, options);
-      }
-
+      return withAndroidSDK52(config, options);
     default:
-      if (PLATFORM === 'android') {
-        return withAndroidSDK52(config, options);
-      }
+      return withAndroidSDK52(config, options);
   }
 };

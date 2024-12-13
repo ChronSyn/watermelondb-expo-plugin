@@ -16,9 +16,7 @@
   ],
   "devDependencies": {
     "@expo/config-plugins": "^9.0.12",
-    "@types/minimist": "^1.2.5",
-    "expo-module-scripts": "^4.0.2",
-    "minimist": "^1.2.8"
+    "expo-module-scripts": "^4.0.2"
   },
   "files": [
     "build",
