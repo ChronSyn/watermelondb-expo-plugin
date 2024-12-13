@@ -364,43 +364,33 @@ const withWatermelonDBAndroidJSI = (config: ExpoConfig, options: Options) => {
 
   function mainApplication(mainAppConfig: ExpoConfig): ExpoConfig {
     return withMainApplication(mainAppConfig, (mod) => {
-      if (
-          !mod.modResults.contents.includes(
-              'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;'
-          )
-      ) {
-        mod.modResults.contents = mod.modResults.contents.replace(
-            'import com.nozbe.watermelondb.WatermelonDBPackage;',
-            `
-          import com.nozbe.watermelondb.WatermelonDBPackage;
-          import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;
-          import com.facebook.react.bridge.JSIModulePackage;
-        `
-        );
-      }
-      if (!mod.modResults.contents.includes('return new WatermelonDBJSIPackage()')) {
-        mod.modResults.contents = mod.modResults.contents.replace(
-          'new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {',
-          [
-            'new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {',
-            '  @Override',
-            '  protected JSIModulePackage getJSIModulePackage() {',
-            '    return new WatermelonDBJSIPackage();',
-            '  }',
-          ].join('\n')
-        );
-      }
 
-      const getPackagesOverrideOriginal = [
-        '// packages.add(new MyReactNativePackage());'
-      ].join('\n')
-      const getPackagesOverrideNew = [
-        '// packages.add(new MyReactNativePackage());',
-        'add(WatermelonDBJSIPackage());'
-      ].join('\n')
       mod.modResults.contents = mod.modResults.contents.replace(
-        getPackagesOverrideOriginal,
-        getPackagesOverrideNew
+        'import com.nozbe.watermelondb.WatermelonDBPackage;',
+        [
+          'import com.nozbe.watermelondb.WatermelonDBPackage;',
+          'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;',
+          'import com.facebook.react.bridge.JSIModulePackage;',
+        ].join('\n')
+      )
+
+      mod.modResults.contents = mod.modResults.contents.replace(
+        'new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {',
+        [
+          'new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {',
+          '  @Override',
+          '  protected JSIModulePackage getJSIModulePackage() {',
+          '    return new WatermelonDBJSIPackage();',
+          '  }',
+        ].join('\n')
+      );
+
+      mod.modResults.contents = mod.modResults.contents.replace(
+        '// packages.add(new MyReactNativePackage());',
+        [
+          '// packages.add(new MyReactNativePackage());',
+          'add(WatermelonDBJSIPackage());'
+        ].join('\n')
       )
 
       return mod;
