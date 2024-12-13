@@ -75,7 +75,7 @@ function mainApplication(config) {
         if (!mod.modResults.contents.includes("import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage")) {
             mod.modResults['contents'] = mod.modResults.contents.replace('import android.app.Application', [
                 'import android.app.Application',
-                // 'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;',
+                'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;',
                 // 'import com.facebook.react.bridge.JSIModulePackage;'
             ].join('\n'));
         }
