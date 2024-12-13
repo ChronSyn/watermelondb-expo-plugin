@@ -109,21 +109,25 @@ const cocoaPods = (config: ExpoConfig): ExpoConfig => {
 function mainApplication(config: ExpoConfig): ExpoConfig {
   return withMainApplication(config, (mod) => {
     if (!mod.modResults.contents.includes("import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage")) {
-      mod.modResults['contents'] = mod.modResults.contents.replace('import android.app.Application', `
-import android.app.Application
-import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;
-import com.facebook.react.bridge.JSIModulePackage;        
-`);
+      mod.modResults['contents'] = mod.modResults.contents.replace(
+        'import android.app.Application',
+        [
+          'import android.app.Application',
+          'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;',
+          'import com.facebook.react.bridge.JSIModulePackage;'
+        ].join('\n')
+      );
     }
 
     if (!mod.modResults.contents.includes("override fun getJSIModulePackage(): JSIModulePackage")) {
       const newContents2 = mod.modResults.contents.replace(
         'override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED',
-        `
-        override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
-        override fun getJSIModulePackage(): JSIModulePackage {
-        return getPackages()
-        }`
+        [
+          'override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED',
+          'override fun getJSIModulePackage(): JSIModulePackage {',
+          ' return getPackages()',
+          `}`
+        ].join('\n')
       )
       mod.modResults.contents = newContents2;
     }
@@ -374,20 +378,31 @@ const withWatermelonDBAndroidJSI = (config: ExpoConfig, options: Options) => {
         `
         );
       }
-      if (
-          !mod.modResults.contents.includes('return new WatermelonDBJSIPackage()')
-      ) {
+      if (!mod.modResults.contents.includes('return new WatermelonDBJSIPackage()')) {
         mod.modResults.contents = mod.modResults.contents.replace(
+          'new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {',
+          [
             'new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {',
-            `
-          new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {
-            @Override
-             protected JSIModulePackage getJSIModulePackage() {
-               return new WatermelonDBJSIPackage(); 
-             }
-          `
+            '  @Override',
+            '  protected JSIModulePackage getJSIModulePackage() {',
+            '    return new WatermelonDBJSIPackage();',
+            '  }',
+          ].join('\n')
         );
       }
+
+      const getPackagesOverrideOriginal = [
+        '// packages.add(new MyReactNativePackage());'
+      ].join('\n')
+      const getPackagesOverrideNew = [
+        '// packages.add(new MyReactNativePackage());',
+        'add(WatermelonDBJSIPackage());'
+      ].join('\n')
+      mod.modResults.contents = mod.modResults.contents.replace(
+        getPackagesOverrideOriginal,
+        getPackagesOverrideNew
+      )
+
       return mod;
     }) as ExpoConfig;
   }
@@ -413,6 +428,15 @@ export function withSDK50(options: Options) {
     if (options?.excludeSimArch === true) {
       currentConfig = withExcludedSimulatorArchitectures(currentConfig);
     }
+
+    return currentConfig as ExpoConfig;
+  }
+}
+
+// @ts-ignore - NOTE: This is in preparation for supporting the new architecture once @nozbe/watermelondb is updated
+export function withNewArch(options: Options) {
+  return (config: ExpoConfig): ExpoConfig => {
+    let currentConfig: ExpoConfig = config;
 
     return currentConfig as ExpoConfig;
   }
