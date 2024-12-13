@@ -113,24 +113,17 @@ function mainApplication(config: ExpoConfig): ExpoConfig {
         'import android.app.Application',
         [
           'import android.app.Application',
-          'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;',
-          'import com.facebook.react.bridge.JSIModulePackage;'
+          // 'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;',
+          // 'import com.facebook.react.bridge.JSIModulePackage;'
         ].join('\n')
       );
     }
 
-    if (!mod.modResults.contents.includes("override fun getJSIModulePackage(): JSIModulePackage")) {
-      const newContents2 = mod.modResults.contents.replace(
-        'override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED',
-        [
-          'override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED',
-          'override fun getJSIModulePackage(): JSIModulePackage {',
-          ' return getPackages()',
-          `}`
-        ].join('\n')
-      )
-      mod.modResults.contents = newContents2;
-    }
+    // Remove getJSIModulePackage method if it exists, for SDK 51+ compatibility
+    mod.modResults.contents = mod.modResults.contents.replace(/override fun getJSIModulePackage\(\): JSIModulePackage\s*\{[^}]*\}/s, "");
+    mod.modResults.contents = mod.modResults.contents.replace(
+      "import com.facebook.react.bridge.JSIModulePackage;", ""
+    )
 
     return mod;
   }) as ExpoConfig;

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.withSDK50 = void 0;
+exports.withNewArch = exports.withSDK50 = void 0;
 const config_plugins_1 = require("@expo/config-plugins");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -73,20 +73,15 @@ const cocoaPods = (config) => {
 function mainApplication(config) {
     return (0, config_plugins_1.withMainApplication)(config, (mod) => {
         if (!mod.modResults.contents.includes("import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage")) {
-            mod.modResults['contents'] = mod.modResults.contents.replace('import android.app.Application', `
-import android.app.Application
-import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;
-import com.facebook.react.bridge.JSIModulePackage;        
-`);
+            mod.modResults['contents'] = mod.modResults.contents.replace('import android.app.Application', [
+                'import android.app.Application',
+                // 'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;',
+                // 'import com.facebook.react.bridge.JSIModulePackage;'
+            ].join('\n'));
         }
-        if (!mod.modResults.contents.includes("override fun getJSIModulePackage(): JSIModulePackage")) {
-            const newContents2 = mod.modResults.contents.replace('override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED', `
-        override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
-        override fun getJSIModulePackage(): JSIModulePackage {
-        return getPackages()
-        }`);
-            mod.modResults.contents = newContents2;
-        }
+        // Remove getJSIModulePackage method if it exists, for SDK 51+ compatibility
+        mod.modResults.contents = mod.modResults.contents.replace(/override fun getJSIModulePackage\(\): JSIModulePackage\s*\{[^}]*\}/s, "");
+        mod.modResults.contents = mod.modResults.contents.replace("import com.facebook.react.bridge.JSIModulePackage;", "");
         return mod;
     });
 }
@@ -247,22 +242,22 @@ const withWatermelonDBAndroidJSI = (config, options) => {
     }
     function mainApplication(mainAppConfig) {
         return (0, config_plugins_1.withMainApplication)(mainAppConfig, (mod) => {
-            if (!mod.modResults.contents.includes('import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;')) {
-                mod.modResults.contents = mod.modResults.contents.replace('import com.nozbe.watermelondb.WatermelonDBPackage;', `
-          import com.nozbe.watermelondb.WatermelonDBPackage;
-          import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;
-          import com.facebook.react.bridge.JSIModulePackage;
-        `);
-            }
-            if (!mod.modResults.contents.includes('return new WatermelonDBJSIPackage()')) {
-                mod.modResults.contents = mod.modResults.contents.replace('new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {', `
-          new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {
-            @Override
-             protected JSIModulePackage getJSIModulePackage() {
-               return new WatermelonDBJSIPackage(); 
-             }
-          `);
-            }
+            mod.modResults.contents = mod.modResults.contents.replace('import com.nozbe.watermelondb.WatermelonDBPackage;', [
+                'import com.nozbe.watermelondb.WatermelonDBPackage;',
+                'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;',
+                'import com.facebook.react.bridge.JSIModulePackage;',
+            ].join('\n'));
+            mod.modResults.contents = mod.modResults.contents.replace('new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {', [
+                'new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {',
+                '  @Override',
+                '  protected JSIModulePackage getJSIModulePackage() {',
+                '    return new WatermelonDBJSIPackage();',
+                '  }',
+            ].join('\n'));
+            mod.modResults.contents = mod.modResults.contents.replace('// packages.add(new MyReactNativePackage());', [
+                '// packages.add(new MyReactNativePackage());',
+                'add(WatermelonDBJSIPackage());'
+            ].join('\n'));
             return mod;
         });
     }
@@ -288,6 +283,14 @@ function withSDK50(options) {
     };
 }
 exports.withSDK50 = withSDK50;
+// @ts-ignore - NOTE: This is in preparation for supporting the new architecture once @nozbe/watermelondb is updated
+function withNewArch(options) {
+    return (config) => {
+        let currentConfig = config;
+        return currentConfig;
+    };
+}
+exports.withNewArch = withNewArch;
 // @ts-ignore
 exports.default = (config, options) => {
     if (config.sdkVersion >= '50.0.0') {
