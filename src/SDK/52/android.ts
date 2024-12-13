@@ -9,6 +9,12 @@ import {
 import { ExpoConfig } from "@expo/config-types";
 import fs from "fs";
 
+type Options = {
+  disableJsi?: boolean;
+  databases?: string[];
+  excludeSimArch?: boolean;
+}
+
 function settingGradle(gradleConfig: ExpoConfig): ExpoConfig {
   return withSettingsGradle(gradleConfig, (mod) => {
     if (!mod.modResults.contents.includes(':watermelondb-jsi')) {
@@ -76,7 +82,6 @@ function proGuardRules(config: ExpoConfig): ExpoConfig {
   }]) as ExpoConfig;
 }
 
-// @ts-ignore
 export function withAndroidSDK52(options: Options) {
   return (config: ExpoConfig): ExpoConfig => {
     let currentConfig: ExpoConfig = config;
@@ -91,7 +96,6 @@ export function withAndroidSDK52(options: Options) {
   }
 }
 
-// @ts-ignore
-export default (config, options) => {
+export default (config: ExpoConfig, options: Options) => {
   return withAndroidSDK52(options)(config);
 };
