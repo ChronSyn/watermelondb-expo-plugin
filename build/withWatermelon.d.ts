@@ -1,10 +1,2 @@
-import { ExpoConfig } from "@expo/config-types";
-type Options = {
-    disableJsi?: boolean;
-    databases?: string[];
-    excludeSimArch?: boolean;
-};
-export declare function withSDK50(options: Options): (config: ExpoConfig) => ExpoConfig;
-export declare function withNewArch(options: Options): (config: ExpoConfig) => ExpoConfig;
-declare const _default: (config: any, options: any) => any;
+declare const _default: (config: any, options: any) => import("@expo/config-types").ExpoConfig | undefined;
 export default _default;
