@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const android_1 = __importDefault(require("./SDK/52/android"));
 //@ts-ignore
 exports.default = (config, options) => {
-    console.log(config);
+    console.log(options);
     switch (config.sdkVersion) {
         case '52.0.0':
             if (config.platform === 'android') {
