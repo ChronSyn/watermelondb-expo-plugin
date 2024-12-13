@@ -2,17 +2,10 @@ import {
   withDangerousMod,
   withSettingsGradle,
   withAppBuildGradle,
-  withMainApplication,
-  ExportedConfigWithProps,
-  withGradleProperties,
+  withMainApplication
 } from "@expo/config-plugins";
 import { ExpoConfig } from "@expo/config-types";
 import fs from "fs";
-import minimist from "minimist";
-
-const args = minimist(process.argv.slice(2));
-
-console.log({ args })
 
 type Options = {
   disableJsi?: boolean;
