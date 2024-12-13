@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.withAndroidSDK52 = void 0;
 const config_plugins_1 = require("@expo/config-plugins");
 const fs_1 = __importDefault(require("fs"));
+const args = process.argv.slice(2);
+console.log({ args });
 function settingGradle(gradleConfig) {
     return (0, config_plugins_1.withSettingsGradle)(gradleConfig, (mod) => {
         if (!mod.modResults.contents.includes(':watermelondb-jsi')) {
