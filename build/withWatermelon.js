@@ -83,7 +83,7 @@ import com.facebook.react.bridge.JSIModulePackage;
             const newContents2 = mod.modResults.contents.replace('override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED', `
         override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
         override fun getJSIModulePackage(): JSIModulePackage {
-        return WatermelonDBJSIPackage()
+        return getPackages()
         }`);
             mod.modResults.contents = newContents2;
         }
