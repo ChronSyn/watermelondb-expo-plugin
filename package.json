@@ -16,6 +16,7 @@
   ],
   "devDependencies": {
     "@expo/config-plugins": "^8.0.4",
+    "@types/minimist": "^1.2.5",
     "expo-module-scripts": "^3.5.1"
   },
   "files": [
@@ -41,5 +42,8 @@
     "type": "git",
     "url": "git+https://github.com/morrowdigital/watermelondb-expo-plugin.git"
   },
-  "author": "Morrow"
+  "author": "Morrow",
+  "dependencies": {
+    "minimist": "^1.2.8"
+  }
 }
