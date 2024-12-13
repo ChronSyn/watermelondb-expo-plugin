@@ -37,7 +37,7 @@ function mainApplication(config) {
             mod.modResults['contents'] = mod.modResults.contents.replace('import android.app.Application', [
                 'import android.app.Application',
                 'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;',
-                // 'import com.facebook.react.bridge.JSIModulePackage;'
+                'import com.facebook.react.bridge.JSIModulePackage;'
             ].join('\n'));
         }
         // Remove getJSIModulePackage method if it exists, for SDK 51+ compatibility

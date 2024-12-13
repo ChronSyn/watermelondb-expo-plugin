@@ -52,7 +52,7 @@ function mainApplication(config: ExpoConfig): ExpoConfig {
         [
           'import android.app.Application',
           'import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;',
-          // 'import com.facebook.react.bridge.JSIModulePackage;'
+          'import com.facebook.react.bridge.JSIModulePackage;'
         ].join('\n')
       );
     }
